@@ -1,0 +1,15 @@
+{%extends 'layout.html'%}
+
+{%block header%}
+ <img src="/static/logo.png">
+ <a href="/">>Shop<</a>
+ <a href="/products">Products</a>
+ <a href="/cart">Cart({{bag_items_count}})</a>
+ {%endblock%}
+   {% comment %} 
+      HW21*: Show client name email address and amoun 
+   {% endcomment %}
+ {%block content%}
+ <h1>Payment Success (AMAUN), at (client name) you've received a confirmation (Client emailaddress)!</h1>
+ {%endblock%}
+

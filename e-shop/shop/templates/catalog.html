@@ -1,0 +1,132 @@
+{%extends 'layout.html'%}
+
+{%block header%}
+ <img src="/static/logo.png">
+ <a href="/">Shop</a>
+ <a href="/products">>Products<</a>
+ <a href="/cart">Cart({{bag_items_count}})</a>
+ {%endblock%}
+
+ {%block content%}
+
+
+    <h1> Products Catalog </h1>
+    {% comment %} 
+        HW10 : style the paginator:
+            - center it
+            - change text color
+            - remove underline
+            - increase font size
+    {% endcomment %}
+    <div class="paginator">
+
+        <a class="paginator">
+            {%if page_number > 1 %}
+        <a class="paginator" href="products?page={{page_number|add:-1}}" >
+            
+            {%else%}
+        <a class="paginator" href="products?page=1" >
+            {%endif%}
+            <span class="paginator">◄</span>    
+        </a>
+        </a>
+        </a>
+                    {% for pn in paginator.page_range %}
+                    <a href="/products?page={{pn}}" class="paginator">
+                        {%if pn == page_number%}({%endif%}
+                        {{pn}}
+                        {%if pn == page_number%}){%endif%}
+                    </a>
+                    {% endfor %}
+
+        <a class="paginator">
+            {%if page_number < 5 %}
+        <a class="paginator" href="products?page={{page_number|add:+1}}" >
+            
+            {%else%}
+        <a class="paginator" href="products?page=5" >
+            {%endif%}
+            <span class="paginator">►</span>    
+        </a>
+        </a>
+        </a>
+        
+    </div>
+
+
+    {% for product in products %} 
+   <article class="product">
+    
+        <img src="{{product.image}}"/>
+
+        <a  href="product/details?pid={{product.id}}" > 
+            
+            <h2 >   
+            {{product.name}}
+            </h2>
+        </a>
+        <p>
+            {{product.description}}
+        </p>
+
+        <div class="price">
+            {{product.price.amount}}{{" "}}{{product.price.currency}}
+        </div>
+        <div class="btn-wrapper">
+            <a href="/buy?pid={{product.id}}" class="product-buy-btn">BUY</a>
+        </div>
+
+    </article>
+
+
+
+    {% endfor %}
+
+    {%endblock%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} 
+
+TEMPLATE INHERINTANCE
+
+
+
+LAYOUT.HTML(base template)
+
+    {block 1}
+
+
+    {block 2}
+
+    {block 3}
+         V 
+         V 
+         V     
+      extends
+         V
+CATALOG.html
+
+
+{% endcomment %}

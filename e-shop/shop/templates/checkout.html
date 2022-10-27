@@ -1,0 +1,45 @@
+{%extends 'layout.html'%}
+
+{%block header%}
+ <img src="/static/logo.png">
+ <a href="/">Shop</a>
+ <a href="/products">Products</a>
+ <a href="/cart">Cart({{bag_items_count}})</a>
+ {%endblock%}
+
+ {%block content%}
+    <h1> Checkout </h1>
+
+   <form action="/order-confirm" method="POST">
+      {% comment %}   
+       https://docs.djangoproject.com/en/4.1/howto/csrf/   < - 
+       protect confident URL data from browser with POST method on browser 
+       
+       {% endcomment %}
+      
+       {% csrf_token %} 
+      <label>
+         Your Full name: 
+         <input type="text" name="fullName">
+      </label>
+   <br>
+      <label>
+         Your Phone Number: 
+         <input type="text" name="phoneNumber">
+      </label>
+   <br>
+   <label>
+      Your Email adrress: 
+      <input type="text" name="emailAddress">
+   </label>
+   <br> 
+   <label>
+      Chose a password: 
+      <input type="password" name="password">
+   </label>
+   <br>
+   <p>
+      <a href = "/order-confirm"><button >Confirm Order!</button></a>
+   </p>
+</form>
+{%endblock%}

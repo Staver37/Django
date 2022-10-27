@@ -1,0 +1,37 @@
+{%extends 'layout.html'%}
+
+{%block header%}
+ <img src="/static/logo.png">
+ <a href="/">Shop</a>
+ <a href="/products">Products</a>
+ <a href="/cart">>Cart({{bag_items_count}})<</a>
+ {%endblock%}
+
+ {%block content%}
+    <h1> Your Cart </h1>
+    <table border="1">
+        <tr>
+            <th>NO</th> <th>Name</th> <th>Quantity</th> <th>cost</th> <th>Operations</th><th>Imag</th>
+        </tr>
+        {%for item in items%}
+        <tr>
+            <td>{{item.id}}</td> 
+            <td>{{item.product.name}}</td>
+            <td>{{item.product.price.amount}} {{item.product.price.currency}} x {{item.quantity}}</td>
+            <td> {{item.cost}} {{item.product.price.currency}} </td> 
+            <td> <a href="/buy?pid={{item.product.id}}"> <button>+</button></a><a href="/decreasesProd?pid={{item.product.id}}"><button> - </button></a> </td> 
+            <td><img style="width:45px;height 45px" src="{{item.product.image}}"/></td> 
+        </tr>
+        
+        {%endfor%}
+        
+        <tr>
+            <td colspan="3">Total Cost</td>
+            <td>{{bag.cost.amount}}{{bag.cost.currency}}</td>
+            <td> <a href="/deleteBag"><button> Remove Your Bag</button></a> </td>
+            <td> <a href = "/checkout"> <button> Checkout </button> </a></td>
+        </tr>
+    </table>
+
+
+{%endblock%}
