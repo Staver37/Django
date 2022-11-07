@@ -5,6 +5,7 @@
  <a href="/">Shop</a>
  <a href="/products">Products</a>
  <a href="/cart">>Cart({{bag_items_count}})<</a>
+ <hr>
  {%endblock%}
 
  {%block content%}
@@ -18,7 +19,7 @@
             <td>{{item.id}}</td> 
             <td>{{item.product.name}}</td>
             <td>{{item.product.price.amount}} {{item.product.price.currency}} x {{item.quantity}}</td>
-            <td> {{item.cost}} {{item.product.price.currency}} </td> 
+            <td>{{item.cost}} {{item.product.price.currency}} </td> 
             <td> <a href="/buy?pid={{item.product.id}}"> <button>+</button></a><a href="/decreasesProd?pid={{item.product.id}}"><button> - </button></a> </td> 
             <td><img style="width:45px;height 45px" src="{{item.product.image}}"/></td> 
         </tr>
@@ -35,3 +36,5 @@
 
 
 {%endblock%}
+
+

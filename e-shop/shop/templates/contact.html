@@ -10,6 +10,13 @@
  {%endblock%}
 
  {%block content%}
- <h1>Welcome to our Django e-shop</h1>
+ <h1>Contact </h1>
+ <form method="post" action=".">
+    {%csrf_token%}
+
+    {{form.as_p}}
+
+    <button>Submit</button>
+ </form>
  {%endblock%}
 

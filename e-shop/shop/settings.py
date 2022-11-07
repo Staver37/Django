@@ -140,16 +140,15 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# https://www.youtube.com/watch?v=TZL-WFzvDJg
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'brownlaw911@gmail.com'
+EMAIL_HOST_PASSWORD = 'afufeocznkugngfy'
 
-# EMAIL_BACKEND = ‘django.core.mail.backends.smtp.EmailBackend’
-# EMAIL_HOST = 'localhost'
-# EMAIL_PORT = '1025'
-# EMAIL_HOST_USER = ":#‘brownlaw911@gmail.com’
-# EMAIL_HOST_PASSWORD = ‘’
-# EMAIL_USE_TLS = False
-# EMAIL_USE_SSL = False
-
-
+# "afufeocznkugngfy"
 
 
 # STATICFILES_DIRS = [

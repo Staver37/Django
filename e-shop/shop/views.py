@@ -4,14 +4,16 @@ from lib2to3.pgen2.pgen import ParserGenerator
 from tkinter import N
 from unicodedata import name
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
 from urllib3 import HTTPResponse
 from .models import *
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt # < --- helps activate or desactivate
 from django.core.mail import send_mail
-import time 
-
+from django.shortcuts import render, redirect
+from .forms import *
+from .ai import*
+import datetime 
+import random
 import json
 import os
 import stripe
@@ -99,8 +101,44 @@ def viewBag(request):
                return render(request,'bag.html',{'bag_items_count':countItemsInBag(request), 'items': items, 'bag':bag,})
           # HW 18 BAG is empty if no products in bag
      else:
-         #return HttpResponse('Your Bag is empty! BUY PRODUCT!')
-          return redirect(request.META.get('HTTP_REFERER'))
+         return HttpResponse('Your Bag is empty!  !!!FIRST BUY THE PRODUCT')
+          # return redirect(request.META.get('HTTP_REFERER'))
+
+     
+
+
+     
+#                      Create Contact
+# https://www.youtube.com/watch?v=dnhEnF7_RyM 
+def coontact_view(request):
+     val = request.method == 'POST'
+     if val:
+          print("bla 1")
+          form = ConactForm(request.POST)
+          if form.is_valid():
+                print('--------------the form was valid-------------')
+ 
+          # sendind email
+          # https://www.youtube.com/watch?v=TZL-WFzvDJ
+          send_mail(
+                    'Payment Confirmation for order | e-shop',
+                    'Payment was done Your order is on the way:).', #HW 22 include amoun payment gateway (stripe) list items 
+                    'brownlaw911@gmail.com', # <--- settings.EMAIL_HOST_USER 
+                    ['staver37@gmail.com'], #<------ substitute  with clien email adres * Email Company 
+                    fail_silently=False,
+                    ) 
+               
+     else:
+               # return redirect('contact')
+          form = ConactForm()
+                
+     return render(request, 'contact.html',{'form':form
+          })
+
+
+
+
+
 
 
 
@@ -110,17 +148,15 @@ def completePayment(request):
           bag_id = request.session['bag_id']
           bag = Bag.objects.get(pk= bag_id)
           
-          
+          # https://www.youtube.com/watch?v=TZL-WFzvDJ
           # sendind email
-          # send_mail(
-          #           'Payment Confirmation for order | e-shop',
-          #           'Here is the message.', #HW 22 include amoun payment gateway (stripe) list items 
-          #           'brownlaw911@gmail.com',   # <--- settings.EMAIL_HOST_USER 
-          #           ['staver37@gmail.com'], # substitute  with clien email adres
-          #           fail_silently=False,
-          #           ) 
-
-
+          send_mail(
+                    'Payment Confirmation for order | e-shop',
+                    'Payment was done Your order is on the way:).', #HW 22 include amoun payment gateway (stripe) list items 
+                    'brownlaw911@gmail.com', # <--- settings.EMAIL_HOST_USER 
+                    ['staver37@gmail.com'], #<------ substitute  with clien email adres
+                    fail_silently=False,
+                    ) 
 
           # HW* 23 :  create a model named  Payment(id,created,updated,client_id,gateway_id)     
           # check get parameter in url
@@ -318,6 +354,39 @@ def viewProduct(request):
      return render(request,'ProdDetails.html',{'product':product,'products':product , 'bag_items_count':countItemsInBag(request)})
      
 
+def addProductForm(request):
+     return render(request, 'add-product.html')
+
+
+
+
+# https://docs.djangoproject.com/en/4.1/topics/http/file-uploads/
+def saveProduct(request):
+     # get the data 
+     name = request.POST.get("name")
+     price = request.POST.get("price_amount")
+     print(name,price)
+
+     # get and save the image fille 
+     files_data = request.FILES['image']
+     timestamp =  datetime.datetime.now().strftime(f'%Y-%m-%d-T%H:%M:%S-{random.randint(0,999999):06d}')
+     file_name = f"{timestamp}.jpg"
+
+     file = open(f"/Users/adrian/Desktop/PY-PROJECTS/Django/e-shop/shop/static/uploaded/{file_name}",  "wb+")# open for writing and    + <---APPEND
+     for chunk in files_data:
+          file.write(chunk)
+     file.close()
+
+     # IMG QUALITY VALIDATION
+     validateImageQuality(file_name)
+
+     return render(request, 'add-product.html')
+
+
+
+
+
+
 def seedData(request):
     return HttpResponse('Seeding done!') 
 
@@ -345,3 +414,11 @@ def seedData(request):
                                         
                                         
  """
+
+
+
+
+
+
+
+

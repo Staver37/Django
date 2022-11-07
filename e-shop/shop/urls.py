@@ -9,9 +9,15 @@ urlpatterns = [
     path('decreasesProd', decreasesProductInBag),
     path('deleteBag', deleteBag),
     path('product/details',viewProduct),
-    path('cart',viewBag),
+    path('cart',viewBag),  
     path('checkout',checkOut),      
     path('order-confirm',confirmOrdedr),   
     path('create-payment-intent',CreatePaymentIntent),   
-    path('payment-completed',completePayment),   
+    path('payment-completed',completePayment), 
+    path('contact', coontact_view),
+
+    
+    # admin routes
+    path('admin/product/add/form', addProductForm),
+    path('admin/product/add/submit', saveProduct),
 ]

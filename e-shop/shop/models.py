@@ -54,7 +54,7 @@ class BagItem(models.Model):
         quantity = models.IntegerField()
 
         #REL
-        product = models.name = models.ForeignKey(Product,on_delete=models.CASCADE, null=True)
+        product = models.ForeignKey(Product,on_delete=models.CASCADE, null=True)
         bag = models.ForeignKey(Bag,on_delete=models.CASCADE, null=True)
         
 
