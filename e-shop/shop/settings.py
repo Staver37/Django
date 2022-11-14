@@ -148,7 +148,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'brownlaw911@gmail.com'
 EMAIL_HOST_PASSWORD = 'afufeocznkugngfy'
 
-# "afufeocznkugngfy"
 
 
 # STATICFILES_DIRS = [

@@ -9,7 +9,29 @@
    {% comment %} 
       HW21*: Show client name email address and amoun 
    {% endcomment %}
- {%block content%}
- <h1>Payment Success (AMAUN), at (client name) you've received a confirmation (Client emailaddress)!</h1>
+   {%block content%}
+<h2>✅ Successful payment {{bag.cost.amount}}{{bag.cost.currency}}, at {{client}} !</h1>
+ 
+<table border="2">
+    <tr>
+        <th>NO</th> <th>Name</th> <th>Quantity</th> <th>cost</th> <th>Operations</th><th>Imag</th>
+    </tr>
+    {%for item in items%}
+    <tr>
+        <td>{{item.id}}</td> 
+        <td>{{item.product.name}}</td>
+        <td>{{item.product.price.amount}} {{item.product.price.currency}} x {{item.quantity}}</td>
+        <td>{{item.cost}} {{item.product.price.currency}} </td> 
+        <td><img style="width:45px;height:50px" src="{{item.product.image}}"/></td> 
+    </tr>
+    {%endfor%}
+    <tr>
+        <td colspan="4">Total Cost</td>
+        <td>{{bag.cost.amount}}{{bag.cost.currency}}</td>
+    </tr>
+</table>
+
+<h3>You've received a confirmation on {{email}}</h3>
+
  {%endblock%}
 

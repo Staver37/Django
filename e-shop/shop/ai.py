@@ -3,7 +3,7 @@ from PIL import Image,ImageOps
 import numpy as np
 
 def imageToTensor(file_name):
-      img = Image.open("/Users/adrian/Desktop/PY-PROJECTS/Django/e-shop/shop/static/uploaded/{file_name}")
+      img = Image.open("/Users/adrian/Desktop/PY-PROJECTS/Django/e-shop/shop/static/uploaded/product_images/{file_name}")
       img = img.crop((0,0,500,500))
       img = ImageOps.grayscale(img)
       img_matrix= np.array(img)
@@ -11,18 +11,15 @@ def imageToTensor(file_name):
       return img_tensor
 
 
-
-
 def validateImageQuality(file_name):
     model = nn.Sequential(
-        nn.Conv2d(in_channels=1,out_channels=64,kernel_size=(20,20), stride = (20,20)), 
+        nn.Conv2d(in_channels=1,out_channels=96,kernel_size=(10,10), stride = (20,20)), 
         nn.Flatten(start_dim=0), 
         nn.Linear(in_features=40000, out_features=2),                               
     )
 
-
-
-    model.load_state_dict(torch.load('/Users/adrian/Desktop/PY-PROJECTS/Django/e-shop/shop/ai-models/image-quality-detector-96-10x10-2000-x-images'))
+    
+    model.load_state_dict(torch.load('/Users/adrian/Desktop/PY-PROJECTS/Django/e-shop/shop/ai-models/image-quality-detector-64-20x20-1000-x-images'))
     model.eval()
 
     x_tensor= imageToTensor(file_name)

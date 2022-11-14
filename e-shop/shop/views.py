@@ -10,7 +10,6 @@ from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt # < --- helps activate or desactivate
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
-from .forms import *
 from .ai import*
 import datetime 
 import random
@@ -24,16 +23,12 @@ stripe.api_key = 'sk_test_51Lt29IL5ApivNSuEe7C1hMyGj05XnUKeqBsxnl8m1FIz2wGju7qjF
 def homePage(request):
     return render(request,'home.html',{'version':'1.0.0','bag_items_count':countItemsInBag(request)})
 
-
-
 def countItemsInBag(request):
       if  request.session.get('bag_id',False):
           bag_id = request.session['bag_id']
           items = BagItem.objects.filter(bag_id = bag_id)
           items_count = len(items)
           return items_count
-
-      
 
 def catalogPage(request):
      products  = Product.objects.all()
@@ -48,27 +43,16 @@ def catalogPage(request):
              'paginator': paginator, 'page_number': page.number,'bag_items_count':countItemsInBag(request)})
 
 
-
-
-
 def checkOut(request):
   # HW20* Check if client_id exist in sesion 
-#         skip this page redirect to confirm order
-      
-     # if  request.session.get('client_id', False):
-     #      client_id = request.session['client_id']
-     #      client = Bag.objects.get(pk= client_id)    
-     #      return render(request,'order-confirm.html') 
-     # else:
+  #       skip this page redirect to confirm order
           return render(request,'checkout.html',{'bag_items_count':countItemsInBag(request)})
 
 
-
-@csrf_exempt # < ---@ helps activate or desactivate 
+@csrf_exempt       # < ---@ helps activate or desactivate 
 def CreatePaymentIntent(request):
-    
      try:
-          
+   
           bag_id = request.session['bag_id']
           bag = Bag.objects.get(pk = bag_id)
 
@@ -87,123 +71,69 @@ def CreatePaymentIntent(request):
      except Exception as e:
           return JsonResponse(error=str(e),status = 403)
           
-     
-
-def viewBag(request): 
+        
+def viewBag(request):
      items = []
      if request.session.get('bag_id', False):
           bag_id = request.session['bag_id']
           bag = Bag.objects.get(pk= bag_id)
           items = BagItem.objects.filter(bag_id=bag_id)
           for item in items:
-               
                item.cost = item.quantity * item.product.price.amount
-               return render(request,'bag.html',{'bag_items_count':countItemsInBag(request), 'items': items, 'bag':bag,})
-          # HW 18 BAG is empty if no products in bag
+          return render(request,'bag.html',{'bag_items_count':countItemsInBag(request), 'items': items, 'bag':bag})
      else:
-         return HttpResponse('Your Bag is empty!  !!!FIRST BUY THE PRODUCT')
-          # return redirect(request.META.get('HTTP_REFERER'))
-
+          return HttpResponse('<h1>Your Bag is empty!</h1> <br> <h3>!!!FIRST BUY THE PRODUCT</h3><a href="/products"><<<</a>' )
      
-
-
-     
-#                      Create Contact
-# https://www.youtube.com/watch?v=dnhEnF7_RyM 
-def coontact_view(request):
-     val = request.method == 'POST'
-     if val:
-          print("bla 1")
-          form = ConactForm(request.POST)
-          if form.is_valid():
-                print('--------------the form was valid-------------')
- 
-          # sendind email
-          # https://www.youtube.com/watch?v=TZL-WFzvDJ
-          send_mail(
-                    'Payment Confirmation for order | e-shop',
-                    'Payment was done Your order is on the way:).', #HW 22 include amoun payment gateway (stripe) list items 
-                    'brownlaw911@gmail.com', # <--- settings.EMAIL_HOST_USER 
-                    ['staver37@gmail.com'], #<------ substitute  with clien email adres * Email Company 
-                    fail_silently=False,
-                    ) 
-               
-     else:
-               # return redirect('contact')
-          form = ConactForm()
-                
-     return render(request, 'contact.html',{'form':form
-          })
-
-
-
-
-
-
-
 
 def completePayment(request):
+     items = []
+     if request.session.get('bag_id', False):
+          bag_id = request.session['bag_id']
+          bag = Bag.objects.get(pk= bag_id)
+          items = BagItem.objects.filter(bag_id=bag_id)
+     cost = Money.objects.values_list('amount').last()
+     cost= cost[0]
+     client = Client.objects.values_list('name').last()
+     client= client[0]
+     email = Client.objects.values_list('email').last()
+     email= email[0]
      # get bag from session
      if  request.session.get('bag_id', False):
           bag_id = request.session['bag_id']
           bag = Bag.objects.get(pk= bag_id)
-          
           # https://www.youtube.com/watch?v=TZL-WFzvDJ
           # sendind email
           send_mail(
-                    'Payment Confirmation for order | e-shop',
-                    'Payment was done Your order is on the way:).', #HW 22 include amoun payment gateway (stripe) list items 
+                    f'Order Confirmation For {client} | E_SHOP',
+                    f'Total Cost: {cost}    Your email isEmail {email}', #HW 22 include amoun payment gateway (stripe) list items 
                     'brownlaw911@gmail.com', # <--- settings.EMAIL_HOST_USER 
-                    ['staver37@gmail.com'], #<------ substitute  with clien email adres
+                    [f'{email}'], #<------ substitute  with clien email adres
                     fail_silently=False,
                     ) 
-
           # HW* 23 :  create a model named  Payment(id,created,updated,client_id,gateway_id)     
-          # check get parameter in url
+          #           check get parameter in url
           # delete bag
           bag.delete()
           # delete bag id from session
           request.session.pop('bag_id')
-          # send email
-     return render(request,'payment-completed.html',{})
-
-
-# def delleteBag(request):
-#      # delete bag
-#      if  request.session.get('bag_id', False):
-#           bag_id = request.session['bag_id']
-#           bag = Bag.objects.get(pk= bag_id)
-#           bag.delete()
-#           # delete bag id from session
-#           request.session.pop('bag_id')
-#           # send email
-#      return render(request,'bag.html',{'bag_items_count':countItemsInBag(request),})
-
-
-
-
-
+          return render(request,'payment-completed.html',{'items': items, 'client':client,'email': email,'bag':bag})
 
 
 
 def confirmOrdedr(request):
      # create new client
-     fullName = request.POST.get('fullName')
-     phoneNumber = request.POST.get('phoneNumber') 
+     fullName     = request.POST.get('fullName')
+     phoneNumber  = request.POST.get('phoneNumber') 
      emailAddress = request.POST.get('emailAddress')
-     password = request.POST.get('password')
-
+     password     = request.POST.get('password')
      client = Client.objects.create(name=fullName,email=emailAddress,phone=phoneNumber,pasword=password,is_vip = False)
      # extract the curent  client_id from sesion and added in bag
      request.session['client_id'] = client.id      
-     bag_id = request.session['bag_id']
-     bag = Bag.objects.get(pk= bag_id)
+     bag_id     = request.session['bag_id']
+     bag        = Bag.objects.get(pk= bag_id)
      bag.client = client
      bag.save()
-     return render(request,'order-confirm.html')
-
-
-
+     return render(request,'order-confirm.html',{"name": fullName,"email": emailAddress})
 
 
 def buyProduct(request):
@@ -331,9 +261,6 @@ def decreasesProductInBag(request):
      # returned to the same page
      return redirect(request.META.get('HTTP_REFERER'))
 
-
-
-
 def deleteBag(request):
           request.session.get('bag_id', False)
           bag_id = request.session['bag_id']
@@ -345,20 +272,16 @@ def deleteBag(request):
 
 
 
-
-
-
 def viewProduct(request):
      product_id = request.GET.get('pid')
      product = Product.objects.get(pk=product_id)
      return render(request,'ProdDetails.html',{'product':product,'products':product , 'bag_items_count':countItemsInBag(request)})
      
 
+
+
 def addProductForm(request):
      return render(request, 'add-product.html')
-
-
-
 
 # https://docs.djangoproject.com/en/4.1/topics/http/file-uploads/
 def saveProduct(request):
@@ -385,39 +308,30 @@ def saveProduct(request):
 
 
 
+#            Create Contact
+# https://www.youtube.com/watch?v=dnhEnF7_RyM 
+def coontact_view(request):
+     return render(request, 'contact.html',{'bag_items_count':countItemsInBag(request)})
+def sendMessage(request):
+     name    = request.POST.get('name') 
+     email   = request.POST.get('email')
+     phone   = request.POST.get('phone') 
+     content = request.POST.get('content')
+     send_mail(
+          f'Client Name:{name}| e-shop',
+          f'Client Email: {email}  |  Phone Nr:  {phone}  |  {content}',
+          'brownlaw911@gmail.com', 
+          ['staver37@gmail.com'],  
+          fail_silently=False,
+          ) 
+     return redirect(request.META.get('HTTP_REFERER'))
+
+
+
 
 
 def seedData(request):
     return HttpResponse('Seeding done!') 
-
-
-
-
-""" 
-                PAYMENT METHOD
-
-1.                       /order-confirm--------->FRONTEND(html,js)
-2.              BACKEND (py)  <----------------------JS                     
-                CreatePaymentIntent() 
-                        \------------------>stripe API() stripe.PaymentIntent.create() ---> SRIPE API
-                     intent  <------------------------------------------------ response -----/
-                       intent.clientSecret ------------> JS
-                                                          |
-                                                     Payment Form
-                                                           \---------------------> finalize payment
-                                  payment-completed <---redirect  <------------------------/
-                                   |        
-                                   V     
-                                   show success message
-                                   delete the bag
-                                   send confirmation email
-                                        
-                                        
- """
-
-
-
-
 
 
 

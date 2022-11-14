@@ -13,13 +13,6 @@
 
 
     <h1> Products Catalog </h1>
-    {% comment %} 
-        HW10 : style the paginator:
-            - center it
-            - change text color
-            - remove underline
-            - increase font size
-    {% endcomment %}
     <div class="paginator">
 
         <a class="paginator">
@@ -44,7 +37,6 @@
         <a class="paginator">
             {%if page_number < 5 %}
         <a class="paginator" href="products?page={{page_number|add:+1}}" >
-            
             {%else%}
         <a class="paginator" href="products?page=5" >
             {%endif%}
@@ -77,13 +69,8 @@
         <div class="btn-wrapper">
             <a href="/buy?pid={{product.id}}" class="product-buy-btn">BUY</a>
         </div>
-
     </article>
-
-
-
     {% endfor %}
-
     {%endblock%}
 
 

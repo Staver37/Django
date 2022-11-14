@@ -15,6 +15,8 @@ urlpatterns = [
     path('create-payment-intent',CreatePaymentIntent),   
     path('payment-completed',completePayment), 
     path('contact', coontact_view),
+    path('sent-message', sendMessage),
+
 
     
     # admin routes

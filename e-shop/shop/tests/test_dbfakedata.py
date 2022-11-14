@@ -24,7 +24,7 @@ class DbFakeData(SimpleTestCase):
 
         self.totalCount = 0
         print ("Starting database seeding...PRODUCTS")
-        for id in range(1,11):
+        for id in range(1,21):
             r = requests.get(f"https://fakestoreapi.com/products/{id}")
             json_data = r.json()
 
@@ -36,7 +36,8 @@ class DbFakeData(SimpleTestCase):
                 id= json_data['id'],
                 name= json_data['title'],
                 description= json_data['description'][:280],
-                price = price
+                image=json_data['image'], 
+                price=price
                 )
             stock = ProductStock.objects.create(quantity =10 * id, product=product)
             self.totalCount += 1    
@@ -65,7 +66,6 @@ class DbFakeData(SimpleTestCase):
 
         print ("Starting database seeding...BAGS")
         for id in range(1,4):
-
             r= requests.get(f"https://fakestoreapi.com/carts/{id}")
             json_data = r.json()
 

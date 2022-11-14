@@ -4,10 +4,10 @@ body {
 }
 
 .product {
-    border: 1px solid #999;
+    border: 1px solid rgb(18, 17, 17);
     padding: 10px;
-    margin: 10px;
-    width: 300px;
+    margin: 20px;
+    width: 325px;
     height: 500px;
     float:left;
 }
@@ -28,7 +28,7 @@ body {
 .product-buy-btn {
     background-color: #456;
     color: white;
-    padding: 20px;
+    padding: 15px;
     display: inline-flexbox;
     margin-top: 10px;
 }
@@ -56,3 +56,28 @@ body {
     color: rgb(4, 3, 11);
 
 }
+
+
+.form-center {
+    display:flex;
+    justify-content: center;
+  }
+           
+     
+.h1_Center {text-align: center;}
+
+.click_button {
+    display: inline-block;
+    padding: 15px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: rgb(237, 237, 237);
+    background-color: #0a0c0b;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+  }
+  

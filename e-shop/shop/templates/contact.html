@@ -10,13 +10,35 @@
  {%endblock%}
 
  {%block content%}
- <h1>Contact </h1>
- <form method="post" action=".">
-    {%csrf_token%}
+ 
+ <div class="paginator">
+   <h1> Send Us a Message: </h1>
 
-    {{form.as_p}}
+      <form  action="/sent-message" method="POST">
+            {% csrf_token %} 
+            <label>
+               Your name: 
+               <input type="text" name="name">
+            </label>
+         <br>
+            <label>
+               Your Email: 
+               <input type="text" name="email">
+            </label>
+         <br>
+            <label>
+               Your Phone: 
+               <input type="text" name="phone">
+            </label>
+         <br> 
+            <textarea name="content" cols="40" rows="20">
 
-    <button>Submit</button>
- </form>
+            </textarea>
+         <br>
+         <p>
+            <a href = "/sent-message"><button class="click_button" >Sent!</button></a>
+         </p>
+      </form>
+</div>
  {%endblock%}
 
