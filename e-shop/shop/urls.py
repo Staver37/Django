@@ -17,7 +17,6 @@ urlpatterns = [
     path('contact', coontact_view),
     path('sent-message', sendMessage),
 
-
     
     # admin routes
     path('admin/product/add/form', addProductForm),

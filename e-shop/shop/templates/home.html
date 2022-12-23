@@ -3,12 +3,22 @@
 <!-- https://coolsymbol.com/cool-fancy-text-generator.html -->
 
 {%block header%}
- <img src="/static/logo.png">
- <a href="/">>Shop<</a>
- <a href="/products">Products</a>
- <a href="/cart">Cart({{bag_items_count}})</a>
- <hr>
- <a href="/contact">Contacts</a>
+<div class="header">
+    <div class="left-section">
+        <img src="/static/logo.png">
+        <a href="/">>Shop<</a>
+        <a href="/products">Products</a>
+        <a href="/cart">Cart({{bag_items_count}})</a>
+        <br>
+        <a href="/contact">Contacts</a>
+    </div>
+    
+    <div class="middle-section">
+    </div>
+
+    <div class="right-section">   
+    </div>
+</div>
  {%endblock%}
 
  {%block content%}

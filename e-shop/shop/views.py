@@ -93,8 +93,10 @@ def completePayment(request):
           items = BagItem.objects.filter(bag_id=bag_id)
      cost = Money.objects.values_list('amount').last()
      cost= cost[0]
+
      client = Client.objects.values_list('name').last()
      client= client[0]
+     
      email = Client.objects.values_list('email').last()
      email= email[0]
      # get bag from session
