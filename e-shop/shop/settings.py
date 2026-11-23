@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Change 
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c1l2a!6_%yfxp51*28f3g%s5avc--eyp&9lqj_xhu5^^4-00_e'
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -91,7 +92,7 @@ DATABASES = {
         'HOST':'localhost',
         'NAME':'e-shop-django',
         'USER':'postgres',
-        'PASSWORD':'4326',
+        'PASSWORD':os.environ.get("DB_PASSWORD", ""),
         'TEST':{
             'NAME':'e-shop-django'
         }
@@ -150,7 +151,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'brownlaw911@gmail.com'
-EMAIL_HOST_PASSWORD = 'afufeocznkugngfy'
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 
 
 
