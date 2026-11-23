@@ -16,8 +16,7 @@ import random
 import json
 import os
 import stripe
-
-stripe.api_key = 'sk_test_51Lt29IL5ApivNSuEe7C1hMyGj05XnUKeqBsxnl8m1FIz2wGju7qjFqW3Yphy3cWm1Eqdj6ciYP6OWVg1JQmqF3Mi001Wbl5BU1'
+stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
 #  controller / views
 def homePage(request):
